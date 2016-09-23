@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartCarControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="422.379" Width="781.785">
     <Grid>
-        
+        <local:Steering></local:Steering>
+        <local:Steering Margin="467,10,0,-10"></local:Steering>
     </Grid>
 </Window>
