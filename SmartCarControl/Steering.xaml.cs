@@ -17,9 +17,45 @@ namespace SmartCarControl {
     /// <summary>
     /// Interaction logic for Steering.xaml
     /// </summary>
-    public partial class Steering : UserControl {
+    public partial class Steering {
         public Steering() {
             InitializeComponent();
+        }
+
+        public bool IsTopActive
+        {
+            set
+            {
+                UpdateColor(value, Top);
+            }
+        }
+
+        public bool IsBottomActive
+        {
+            set
+            {
+                UpdateColor(value, Bottom);
+            }
+        }
+
+        public bool IsLeftActive
+        {
+            set
+            {
+                UpdateColor(value, Left);
+            }
+        }
+
+        public bool IsRightActive
+        {
+            set
+            {
+                UpdateColor(value, Right);
+            }
+        }
+
+        private void UpdateColor(bool isActive, Rectangle rectangle) {
+            rectangle.Fill.Opacity = isActive ? 1.0 : 0.5;
         }
     }
 }

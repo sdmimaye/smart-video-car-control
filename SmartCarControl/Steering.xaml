@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Stroke="Black" Width="100" RenderTransformOrigin="0.5,0.5" Margin="28,100,0,0" Height="100" VerticalAlignment="Top">
+        <Rectangle Name="Left" Fill="#8000F400" HorizontalAlignment="Left" Stroke="Black" Width="100" RenderTransformOrigin="0.5,0.5" Margin="28,100,0,0" Height="100" VerticalAlignment="Top">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -16,7 +16,7 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="100,28,0,0" HorizontalAlignment="Left" Width="100" Height="100" VerticalAlignment="Top">
+        <Rectangle Name="Top" Fill="#80F40000" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="100,28,0,0" HorizontalAlignment="Left" Width="100" Height="100" VerticalAlignment="Top">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -25,7 +25,7 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="172,100,0,0" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
+        <Rectangle Name="Right" Fill="#800000F4" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="172,100,0,0" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -34,7 +34,7 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="100,172,0,0" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
+        <Rectangle Name="Bottom" Fill="#80F4F400" Stroke="Black" RenderTransformOrigin="0.5,0.5" Margin="100,172,0,0" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

@@ -55,11 +55,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ByteBuffer.cs" />
     <Compile Include="Steering.xaml.cs">
       <DependentUpon>Steering.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Steering\ISteeringEngine.cs" />
-    <Compile Include="Steering\UdpSteeringEngine.cs" />
+    <Compile Include="Steer\ISteeringEngine.cs" />
+    <Compile Include="Steer\SteerGenerator.cs" />
+    <Compile Include="Steer\SteeringStep.cs" />
+    <Compile Include="Steer\UdpSteeringEngine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
