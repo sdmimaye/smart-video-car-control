@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+﻿using System.Windows.Controls;
 using System.Windows.Shapes;
 
 namespace SmartCarControl {
     /// <summary>
-    /// Interaction logic for Steering.xaml
+    /// Interaction logic for AltSterring.xaml
     /// </summary>
-    public partial class Steering {
-        public Steering() {
-            InitializeComponent();
+    public partial class Steering : UserControl {
+        public double ElementMargin
+        {
+            get { return ActualWidth / 13; }
         }
 
         public bool IsTopActive
@@ -56,6 +45,17 @@ namespace SmartCarControl {
 
         private void UpdateColor(bool isActive, Rectangle rectangle) {
             rectangle.Fill.Opacity = isActive ? 1.0 : 0.5;
+        }
+
+        public Steering() {
+            InitializeComponent();
+        }
+
+        private void UserControl_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e) {
+            Top.Margin = new System.Windows.Thickness(e.NewSize.Width / 13);
+            Bottom.Margin = new System.Windows.Thickness(e.NewSize.Width / 13);
+            Left.Margin = new System.Windows.Thickness(e.NewSize.Width / 13);
+            Right.Margin = new System.Windows.Thickness(e.NewSize.Width / 13);
         }
     }
 }

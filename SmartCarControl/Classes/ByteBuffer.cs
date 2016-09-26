@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SmartCarControl {
+namespace SmartCarControl.Classes {
     public class ByteBuffer : IDisposable {
         public enum ByteOrder {
             BigEndian,

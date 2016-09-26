@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartCarControl"
         mc:Ignorable="d"
-        KeyDown="MainWindow_OnKeyEvent" KeyUp="MainWindow_OnKeyEvent" Loaded="MainWindow_OnLoaded"
+        KeyDown="MainWindow_OnKeyEvent" KeyUp="MainWindow_OnKeyEvent" 
         Title="Smart-Car-Control" Height="344" Width="640" ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
     <Grid>
-        <local:Steering x:Name="Car" HorizontalAlignment="Left" Width="300"/>
-        <local:Steering x:Name="Camera" HorizontalAlignment="Right" Width="300"/>
+        <local:Steering x:Name="Camera" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="100"/>
+        <local:Steering x:Name="Car" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Height="100" />
     </Grid>
 </Window>

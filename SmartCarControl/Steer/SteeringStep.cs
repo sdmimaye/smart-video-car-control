@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartCarControl.Classes;
+using System;
 
 namespace SmartCarControl.Steer {
     public class SteeringStep {
@@ -20,13 +21,13 @@ namespace SmartCarControl.Steer {
 
         public MovingDirection Direction { get; set; }
         public double DirectionPercentage { get; set; }
-        public int Speed { get; set; }
+        public double SpeedPercentage { get; set; }
         public CameraDirection CamDirection { get; set; }
         public double CamDirectionPercentage { get; set; }
 
         public byte[] Serialize() {
             using (var stream = new ByteBuffer { Endian = ByteBuffer.ByteOrder.BigEndian }) {
-                stream.PutInt32(Speed);
+                stream.PutDouble(SpeedPercentage);
                 if ((Direction & MovingDirection.Left) == MovingDirection.Left) {
                     stream.PutByte(1);
                 } else if ((Direction & MovingDirection.Right) == MovingDirection.Right) {
