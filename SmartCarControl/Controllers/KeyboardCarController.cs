@@ -50,10 +50,10 @@ namespace SmartCarControl.Controllers {
                 step.WithDirection(SteeringStep.MovingDirection.Left, state.PressedKeys.Contains(Key.A) && !state.PressedKeys.Contains(Key.D));
                 step.WithDirection(SteeringStep.MovingDirection.Right, !state.PressedKeys.Contains(Key.A) && state.PressedKeys.Contains(Key.D));
                 step.SpeedPercentage = state.PressedKeys.Contains(Key.W) ? MOVEMENT_SPEED : state.PressedKeys.Contains(Key.S) ? -MOVEMENT_SPEED : 0.0;
-                step.WithCamDirection(SteeringStep.CameraDirection.Up, state.PressedKeys.Contains(Key.UpArrow));
-                step.WithCamDirection(SteeringStep.CameraDirection.Down, state.PressedKeys.Contains(Key.DownArrow));
-                step.WithCamDirection(SteeringStep.CameraDirection.Left, state.PressedKeys.Contains(Key.LeftArrow));
-                step.WithCamDirection(SteeringStep.CameraDirection.Right, state.PressedKeys.Contains(Key.RightArrow));
+                step.WithCamDirection(SteeringStep.CameraDirection.Up, state.PressedKeys.Contains(Key.UpArrow) && !state.PressedKeys.Contains(Key.DownArrow));
+                step.WithCamDirection(SteeringStep.CameraDirection.Down, state.PressedKeys.Contains(Key.DownArrow) && !state.PressedKeys.Contains(Key.UpArrow));
+                step.WithCamDirection(SteeringStep.CameraDirection.Left, state.PressedKeys.Contains(Key.LeftArrow) && !state.PressedKeys.Contains(Key.RightArrow));
+                step.WithCamDirection(SteeringStep.CameraDirection.Right, state.PressedKeys.Contains(Key.RightArrow) && !state.PressedKeys.Contains(Key.LeftArrow));
                 return step;
             } catch (Exception ex){
                 Trace.TraceError("Could not poll keyboard event(s): {0}", ex.StackTrace);

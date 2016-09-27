@@ -70,6 +70,7 @@ namespace SmartCarControl.Controllers {
 
             var step = new SteeringStep();
             step.SpeedPercentage = Percentage(state.RotationY, 65535, 0);
+
             return step;
         }
 
