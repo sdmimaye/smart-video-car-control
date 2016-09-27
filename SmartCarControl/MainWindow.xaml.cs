@@ -23,9 +23,6 @@ namespace SmartCarControl {
         }
 
         private void HandleStep(SteeringStep step) {
-            if (step == null)
-                return;
-
             Car.IsTopActive = step.SpeedPercentage > 0;
             Car.IsBottomActive = step.SpeedPercentage < 0;
             Car.IsRightActive = (step.Direction & SteeringStep.MovingDirection.Right) == SteeringStep.MovingDirection.Right;
@@ -41,11 +38,16 @@ namespace SmartCarControl {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             ThreadPool.QueueUserWorkItem(delegate {
-                while (!_generator.IsDisposed) {
+                while (!_generator.IsDisposed)
+                {
+                    var step = _generator.Update();
+                    if(step == null)
+                        continue;
+
                     Dispatcher.BeginInvoke(new Action(delegate {
-                        HandleStep(_generator.Update());
+                        HandleStep(step);
                     }));
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
                 }
             });
         }

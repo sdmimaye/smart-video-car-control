@@ -6,15 +6,13 @@ using System.Linq;
 
 namespace SmartCarControl.Controllers {
     public class KeyboardCarController : ICarController {
-        private static readonly double MOVEMENT_SPEED = 0.8;
-        private readonly DirectInput _input;
+        private static readonly double VALOCITY = 0.8;
         private readonly Keyboard _keyboard;
 
         private KeyboardState _last;
 
         public KeyboardCarController(IntPtr handle, DirectInput input) {
-            _input = input;
-            _keyboard = new Keyboard(_input);
+            _keyboard = new Keyboard(input);
             _keyboard.SetCooperativeLevel(handle, CooperativeLevel.Nonexclusive | CooperativeLevel.Background);
         }
 
@@ -25,10 +23,7 @@ namespace SmartCarControl.Controllers {
 
         private bool IsKeyboardUpdateRequired(KeyboardState state) {
             try {
-                if (_last == null)
-                    return true;
-
-                return state.PressedKeys.Count != _last.PressedKeys.Count;
+                return state.PressedKeys.Count != _last?.PressedKeys.Count;
             } finally {
                 _last = state;
             }
@@ -46,10 +41,10 @@ namespace SmartCarControl.Controllers {
                 if (!IsKeyboardUpdateRequired(state))
                     return null;
 
-                var step = new SteeringStep();
+                var step = new SteeringStep {DirectionPercentage = VALOCITY, CamDirectionPercentage = VALOCITY};
                 step.WithDirection(SteeringStep.MovingDirection.Left, state.PressedKeys.Contains(Key.A) && !state.PressedKeys.Contains(Key.D));
                 step.WithDirection(SteeringStep.MovingDirection.Right, !state.PressedKeys.Contains(Key.A) && state.PressedKeys.Contains(Key.D));
-                step.SpeedPercentage = state.PressedKeys.Contains(Key.W) ? MOVEMENT_SPEED : state.PressedKeys.Contains(Key.S) ? -MOVEMENT_SPEED : 0.0;
+                step.SpeedPercentage = state.PressedKeys.Contains(Key.W) ? VALOCITY : state.PressedKeys.Contains(Key.S) ? -VALOCITY : 0.0;
                 step.WithCamDirection(SteeringStep.CameraDirection.Up, state.PressedKeys.Contains(Key.UpArrow) && !state.PressedKeys.Contains(Key.DownArrow));
                 step.WithCamDirection(SteeringStep.CameraDirection.Down, state.PressedKeys.Contains(Key.DownArrow) && !state.PressedKeys.Contains(Key.UpArrow));
                 step.WithCamDirection(SteeringStep.CameraDirection.Left, state.PressedKeys.Contains(Key.LeftArrow) && !state.PressedKeys.Contains(Key.RightArrow));
