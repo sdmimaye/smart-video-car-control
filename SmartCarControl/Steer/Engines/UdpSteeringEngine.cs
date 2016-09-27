@@ -1,15 +1,16 @@
-﻿using System;
+﻿using SmartCarControl.Utils;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
-namespace SmartCarControl.Steer {
+namespace SmartCarControl.Steer.Engines {
     public class UdpSteeringEngine : ISteeringEngine {
         private UdpClient _socket;
 
         public void StartEngine() {
             if (_socket != null) {
-                Debug.WriteLine("UdpSTeeringEngine is already running...");
+                Trace.TraceWarning("UdpSTeeringEngine is already running...");
             } else {
                 try {
                     _socket = new UdpClient {
@@ -20,7 +21,7 @@ namespace SmartCarControl.Steer {
                         }
                     };
                 } catch (Exception ex) {
-                    Debug.WriteLine("Error while connecting UDP Socket: {0}", ex.Message);
+                    Trace.TraceError("Error while connecting UDP Socket: {0}", ex.Message);
                 }
             }
         }
@@ -28,12 +29,17 @@ namespace SmartCarControl.Steer {
         public void ExecuteStep(SteeringStep step) {
             var ip = new IPEndPoint(IPAddress.Broadcast, 1338);
             var data = step.Serialize();
+            var crc = new Crc32();
+            var value = crc.ComputeChecksum(data);
+            step.Crc = value;
+
+            data = step.Serialize();
             _socket.Send(data, data.Length, ip);
         }
 
         public void EndEngine() {
             if (_socket == null) {
-                Debug.WriteLine("UdpSteeringEngine is already deinitialized...");
+                Trace.TraceWarning("UdpSteeringEngine is already deinitialized...");
             } else {
                 _socket.Close();
                 _socket = null;

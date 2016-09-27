@@ -1,83 +1,38 @@
-﻿using System;
-using System.Windows.Input;
+﻿using SlimDX.DirectInput;
+using SmartCarControl.Controllers;
+using System;
+using System.Collections.Generic;
 
 namespace SmartCarControl.Steer {
-    public class SteerGenerator {
-        private readonly Key MovementUpKey = DoParseKeyOrFallback(Properties.Settings.Default.MovementUpKey, Key.W);
-        private readonly Key MovementDownKey = DoParseKeyOrFallback(Properties.Settings.Default.MovementDownKey, Key.S);
-        private readonly Key MovementLeftKey = DoParseKeyOrFallback(Properties.Settings.Default.MovementLeftKey, Key.A);
-        private readonly Key MovementRightKey = DoParseKeyOrFallback(Properties.Settings.Default.MovementRightKey, Key.D);
-        private readonly Key CameraUpKey = DoParseKeyOrFallback(Properties.Settings.Default.CameraUpKey, Key.Up);
-        private readonly Key CameraDownKey = DoParseKeyOrFallback(Properties.Settings.Default.CameraDownKey, Key.Down);
-        private readonly Key CameraLeftKey = DoParseKeyOrFallback(Properties.Settings.Default.CameraLeftKey, Key.Left);
-        private readonly Key CameraRightKey = DoParseKeyOrFallback(Properties.Settings.Default.CameraRightKey, Key.Right);
+    public class SteerGenerator : IDisposable {
+        public bool IsDisposed { get; private set; }
 
-        private SteeringStep CurrentStep { get; }
+        private DirectInput Input { get; }
+        private List<ICarController> Controllers { get; }
 
-        public SteerGenerator() {
-            CurrentStep = new SteeringStep { DirectionPercentage = 0.5, CamDirectionPercentage = 0.5 };
+        public SteerGenerator(IntPtr handle) {
+            Input = new DirectInput();
+            Controllers = new List<ICarController>(new ICarController[] {
+                new KeyboardCarController(handle, Input),
+                new GamepadCarController(handle, Input)
+            });
+            IsDisposed = false;
         }
 
-        private static Key DoParseKeyOrFallback(string key, Key fallback) {
-            if (string.IsNullOrWhiteSpace(key))
-                return fallback;
-
-            try {
-                return (Key)Enum.Parse(typeof(Key), key);
-            } catch {
-                return fallback;
+        public SteeringStep Update() {
+            foreach(var ctrl in Controllers) {
+                var step = ctrl.Update();
+                if (step != null)
+                    return step;
             }
+            return null;
         }
 
-        public enum KeyMovement {
-            Up,
-            Down
-        }
-
-        public SteeringStep Update(SlimDX.DirectInput.JoystickState state) {
-            return CurrentStep;
-        }
-
-        public SteeringStep Update(Key key, KeyMovement movement) {
-            switch (movement) {
-                case KeyMovement.Up:
-                    if (key == MovementUpKey || key == MovementDownKey) {
-                        CurrentStep.SpeedPercentage = 0;
-                    } else if (key == MovementLeftKey) {
-                        CurrentStep.Direction &= ~SteeringStep.MovingDirection.Left;
-                    } else if (key == MovementRightKey) {
-                        CurrentStep.Direction &= ~SteeringStep.MovingDirection.Right;
-                    } else if (key == CameraUpKey) {
-                        CurrentStep.CamDirection &= ~SteeringStep.CameraDirection.Up;
-                    } else if (key == CameraDownKey) {
-                        CurrentStep.CamDirection &= ~SteeringStep.CameraDirection.Down;
-                    } else if (key == CameraLeftKey) {
-                        CurrentStep.CamDirection &= ~SteeringStep.CameraDirection.Left;
-                    } else if (key == CameraRightKey) {
-                        CurrentStep.CamDirection &= ~SteeringStep.CameraDirection.Right;
-                    }
-                    break;
-                case KeyMovement.Down:
-                    if (key == MovementUpKey) {
-                        CurrentStep.SpeedPercentage = 80;
-                    } else if (key == MovementDownKey) {
-                        CurrentStep.SpeedPercentage = -80;
-                    } else if (key == MovementLeftKey) {
-                        CurrentStep.Direction |= SteeringStep.MovingDirection.Left;
-                    } else if (key == MovementRightKey) {
-                        CurrentStep.Direction |= SteeringStep.MovingDirection.Right;
-                    } else if (key == CameraUpKey) {
-                        CurrentStep.CamDirection |= SteeringStep.CameraDirection.Up;
-                    } else if (key == CameraDownKey) {
-                        CurrentStep.CamDirection |= SteeringStep.CameraDirection.Down;
-                    } else if (key == CameraLeftKey) {
-                        CurrentStep.CamDirection |= SteeringStep.CameraDirection.Left;
-                    } else if (key == CameraRightKey) {
-                        CurrentStep.CamDirection |= SteeringStep.CameraDirection.Right;
-                    }
-                    break;
+        public void Dispose() {
+            foreach(var ctrl in Controllers) {
+                ctrl.Dispose();
             }
-            return CurrentStep;
+            IsDisposed = true;
         }
     }
 }

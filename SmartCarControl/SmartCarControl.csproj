@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,15 +60,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\Crc32.cs" />
+    <Compile Include="Controllers\GamepadCarController.cs" />
+    <Compile Include="Controllers\ICarController.cs" />
+    <Compile Include="Controllers\KeyboardCarController.cs" />
     <Compile Include="Steering.xaml.cs">
       <DependentUpon>Steering.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\ByteBuffer.cs" />
-    <Compile Include="Classes\Gamepad.cs" />
-    <Compile Include="Steer\ISteeringEngine.cs" />
+    <Compile Include="Utils\ByteBuffer.cs" />
+    <Compile Include="Steer\Engines\ISteeringEngine.cs" />
     <Compile Include="Steer\SteerGenerator.cs" />
     <Compile Include="Steer\SteeringStep.cs" />
-    <Compile Include="Steer\UdpSteeringEngine.cs" />
+    <Compile Include="Steer\Engines\UdpSteeringEngine.cs" />
     <Page Include="Steering.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

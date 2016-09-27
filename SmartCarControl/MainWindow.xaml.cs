@@ -1,6 +1,9 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using SmartCarControl.Steer;
+using System;
+using System.Threading;
+using System.Windows.Interop;
+using SmartCarControl.Steer.Engines;
 
 namespace SmartCarControl {
     /// <summary>
@@ -9,24 +12,20 @@ namespace SmartCarControl {
     public partial class MainWindow : Window {
         private readonly ISteeringEngine _engine;
         private readonly SteerGenerator _generator;
-        private readonly Classes.Gamepad _gamepad;
 
         public MainWindow() {
             InitializeComponent();
             _engine = new UdpSteeringEngine();
             _engine.StartEngine();
-            _generator = new SteerGenerator();
-            _gamepad = new Classes.Gamepad(HandleJoystick);
 
-            HandleKey(Key.None, SteerGenerator.KeyMovement.Up);
-        }
-
-        private void MainWindow_OnKeyEvent(object sender, KeyEventArgs e) {
-            var movement = e.IsDown ? SteerGenerator.KeyMovement.Down : SteerGenerator.KeyMovement.Up;
-            HandleKey(e.Key, movement);
+            var interop = new WindowInteropHelper(this);
+            _generator = new SteerGenerator(interop.Owner);
         }
 
         private void HandleStep(SteeringStep step) {
+            if (step == null)
+                return;
+
             Car.IsTopActive = step.SpeedPercentage > 0;
             Car.IsBottomActive = step.SpeedPercentage < 0;
             Car.IsRightActive = (step.Direction & SteeringStep.MovingDirection.Right) == SteeringStep.MovingDirection.Right;
@@ -40,12 +39,19 @@ namespace SmartCarControl {
             _engine.ExecuteStep(step);
         }
 
-        private void HandleJoystick(SlimDX.DirectInput.JoystickState state) {
-            HandleStep(_generator.Update(state));
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            ThreadPool.QueueUserWorkItem(delegate {
+                while (!_generator.IsDisposed) {
+                    Dispatcher.BeginInvoke(new Action(delegate {
+                        HandleStep(_generator.Update());
+                    }));
+                    Thread.Sleep(10);
+                }
+            });
         }
 
-        private void HandleKey(Key key, SteerGenerator.KeyMovement movement) {
-            HandleStep(_generator.Update(key, movement));
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            _generator.Dispose();
         }
     }
 }

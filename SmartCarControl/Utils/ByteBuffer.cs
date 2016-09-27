@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SmartCarControl.Classes {
+namespace SmartCarControl.Utils {
     public class ByteBuffer : IDisposable {
         public enum ByteOrder {
             BigEndian,
@@ -43,6 +43,10 @@ namespace SmartCarControl.Classes {
         }
 
         public ByteBuffer PutInt32(int value) {
+            return PutBytes(DoRevertIfRequired(BitConverter.GetBytes(value)));
+        }
+
+        public ByteBuffer PutUInt32(uint value) {
             return PutBytes(DoRevertIfRequired(BitConverter.GetBytes(value)));
         }
 
